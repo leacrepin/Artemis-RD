@@ -33,18 +33,18 @@ $font3=$phpWord->addFontStyle('TOCStyle',$fontStyle2);
 $font3->setBold();
 
 
-// Add title styles
+// Add title style
 $phpWord->addTitleStyle(1, array('color'=> '313131','size' => 16), array('numStyle' => 'hNum', 'numLevel' => 0));
-$phpWord->addTitleStyle(2, array('color'=> '313131','size' => 14), array('numStyle' => 'hNum', 'numLevel' => 1));
-$phpWord->addTitleStyle(3, array('color'=> '313131','size' => 12), array('numStyle' => 'hNum', 'numLevel' => 2));
 
 
 //Section
 $pagedegarde = $phpWord->addSection();
-$section = $phpWord->addSection(array(
-    'pageNumberingStart' => 1
-));
+$section = $phpWord->addSection();
 
+//Numérotation des pages
+$footer=$section->addFooter();
+$text=$footer->addPreserveText("{PAGE}");
+//$footer->addText($text->getText(),array('color'=> '1A9386','name' => 'Calibri', 'size' => '12'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 
 //logo ArtemisRD
 for($i=1; $i<=10; $i++){
@@ -92,7 +92,7 @@ $pagedegarde->addText(
 );
 
 //Barre ArtemisRD
-for($i=1; $i<=11; $i++){
+for($i=1; $i<=10; $i++){
     $pagedegarde->addText(
 		htmlspecialchars(
 				''
@@ -106,6 +106,8 @@ $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes
     );
 $pagedegarde->addText(htmlspecialchars("_______________________________________________________________"),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+
+
 
 //table des matières
 $section->addText(htmlspecialchars("_________________________Table des matieres_________________________"),'titre table matiere');
