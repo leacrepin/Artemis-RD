@@ -7,17 +7,25 @@ for($j=1;$j<10;$j++){
     }
 }
 
-//Récuperation des images
+//RÃ©cuperation des images
 $nb=1;
     foreach($_FILES as $resultat){
-	$rst=move_uploaded_file($resultat["tmp_name"],"images/".$nb.".png");
-        $nb++;
+        if(!is_array($resultat["tmp_name"])){
+            $rst=move_uploaded_file($resultat["tmp_name"],"images/".$nb.".png");
+            $nb++;
+        }else{
+            foreach($resultat["tmp_name"] as $image){
+                $rst=move_uploaded_file($image,"images/".$nb.".png");
+                $nb++;
+            }
+        }
+	
     }
                                         
 //REQUIRE
 require_once 'vendor/autoload.php';
 
-//Création du doc
+//CrÃ©ation du doc
 $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
 //Langue
@@ -37,7 +45,7 @@ $font5->setBold();
 $font6=$phpWord->addFontStyle('date', array('color'=> '1A9386','name' => 'Calibri', 'size' => '36', 'bold' => 'true','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
 $font6->setSmallCaps();
 
-//Numérotation Titres
+//NumÃ©rotation Titres
 $phpWord->addNumberingStyle(
     'hNum',
     array('type' => 'multilevel', 'levels' => array(
@@ -64,19 +72,19 @@ $phpWord->addTitleStyle(1, array('color'=> '313131','size' => 16), array('numSty
 $pagedegarde = $phpWord->addSection();
 $section = $phpWord->addSection();
 
-//Numérotation des pages
+//NumÃ©rotation des pages
 $footer=$section->addFooter();
 $footer->addPreserveText("{PAGE}");
 
 //Logo artemis-RD footer
-$footer->addImage('images/ArtemisRD.png',array('width' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+$footer->addImage('images/ArtemisRD.png',array('height' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 
 //Logo entreprise header
 $header = $section->addHeader();
 if(file_exists("images/1.png")){
-        $header->addImage('images/1.png',array('width' => 80,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+        $header->addImage('images/1.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
 }else{
-        $header->addImage('images/defaut.png',array('width' => 80,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+        $header->addImage('images/defaut.png',array('width' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
 }
 
 //logo Entreprise
@@ -84,7 +92,7 @@ for($i=1; $i<=10; $i++){
     $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 }
 if(file_exists("images/1.png")){
-        $pagedegarde->addImage('images/1.png',array('width' => 250,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+        $pagedegarde->addImage('images/1.png',array('height' => 79,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }else{
         $pagedegarde->addImage('images/defaut.png',array('width' => 150,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }
@@ -123,7 +131,7 @@ for($i=1; $i<=17; $i++){
     $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 }
 $pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes',
+$pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 NÃ®mes',
 		array('name' => 'Calibri', 'size' => '10'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
     );
 $pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
@@ -131,13 +139,13 @@ $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' =
 
 
 
-//table des matières
+//table des matiÃ¨res
 $section->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$section->addText("Table des matières",'titre table matiere',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
+$section->addText("Table des matiÃ¨res",'titre table matiere',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 $section->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 $section->addTextBreak(2);
 $toc2 = $section->addTOC($font3,$fontStyle);
-$section->addText('PS: Veuillez réactualiser la table des matières si vous voulez les pages ainsi que numéros, pensez à tout remettre en gras comme vous le souhaitez.');
+$section->addText('PS: Veuillez rÃ©actualiser la table des matiÃ¨res si vous voulez les pages ainsi que numÃ©ros, pensez Ã  tout remettre en gras comme vous le souhaitez.');
 $section->addPageBreak();
 
 // Body
