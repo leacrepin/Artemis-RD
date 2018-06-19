@@ -68,20 +68,20 @@ $footer->addImage('images/ArtemisRD.png',array('height' => 50, 'alignment' => \P
 
 //Logo entreprise header
 $header = $section->addHeader();
-if(file_exists("images/1.png")){
-        $header->addImage('images/Mareva.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+if(file_exists('images/'.$_GET["entreprise"].'.png')){
+        $header->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
 }else{
-        $header->addImage('images/defaut.png',array('width' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+        $header->addImage('images/defaut.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
 }
 
 //logo Entreprise
 for($i=1; $i<=10; $i++){
     $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 }
-if(file_exists("images/1.png")){
-        $pagedegarde->addImage('images/Mareva.png',array('height' => 79,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+if(file_exists('images/'.$_GET["entreprise"].'.png')){
+$pagedegarde->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 79,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }else{
-        $pagedegarde->addImage('images/defaut.png',array('width' => 150,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+        $pagedegarde->addImage('images/defaut.png',array('height' => 79,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }
 
 
@@ -103,7 +103,7 @@ $pagedegarde->addText(
 		htmlspecialchars(
 				$_GET["entreprise"]
 		),
-		array('color'=> '313131','name' => 'Calibri', 'size' => '36','spaceBefore' => 0.32, 'spaceAfter' => 0.32),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
+		'rStyle',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
 
 $pagedegarde->addText(
