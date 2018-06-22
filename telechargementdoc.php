@@ -8,9 +8,18 @@ Session::checkRight("profile", READ);
 
 global $DB;
 
+//Fonction pour convertir le temps
+function convertirTemps($duree){
+	$heures=intval($duree / 3600);
+	$minutes=intval(($duree % 3600) / 60);
+	$secondes=intval((($duree % 3600) % 60));
+	return($heures.":".$minutes.":".$secondes);
+}
+
 //BEGIN BDD
 
 $datas = "BETWEEN '".$_GET["date1"]." 00:00:00' AND '".$_GET["date2"]." 23:59:59'";
+$date = "du ".$_GET["date1"]." au ".$_GET["date2"];
 $id_ent = $_GET["id"];
 
 //Base de donnée -> Liste des incidents critiques et majeurs
@@ -114,12 +123,7 @@ $query3 = "
 			$tempssuivi = $DB->query($query3) or die('erro');
 
 //Nombre d'image
-$nb=1;
-for($j=1;$j<10;$j++){
-    if(file_exists("images/{$j}.png")){
-		$nb++;
-    }
-}
+$nb=6;
 
                                         
 //REQUIRE DOC
@@ -221,7 +225,7 @@ $pagedegarde->addText(
 
 $pagedegarde->addText(
 		htmlspecialchars(
-				$_GET["date"]
+				$date
 		),
 		'date',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
@@ -289,7 +293,7 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($critiqueetmajeurtemps);
-$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
 $table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(2);
@@ -313,7 +317,7 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($critiquetemps);
-$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
 $table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
 $section->addTextBreak(2);
 
@@ -336,7 +340,7 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($mineurtemps);
-$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
 $table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
 $section->addTextBreak(2);
 

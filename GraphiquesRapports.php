@@ -398,8 +398,30 @@ echo '<div id="name"  style="margin-top: 15px;"><span>'.$ent_name['name'].'</spa
 	    odometer4.innerHTML = <?php echo $close; ?>;
 	}, 1000);
 </script>
-			<a tabindex="-1" href=<?php echo "telechargementdoc.php?id=".$id_ent."&date1=".$data_ini."&date2=".$data_fin."&con=1&entreprise=".$ent_name['name']."&date=".$data_ini."à".$data_fin ; ?> target="_blank"> Télécharger le fichier client </a>
 			
+			<h1>Faire mon fichier client</h1>
+        <p><a tabindex="-1" href=<?php echo "telechargementdoc.php?id=".$id_ent."&date1=".$data_ini."&date2=".$data_fin."&entreprise=".$ent_name['name'] ; ?> target="_blank"> Télécharger le fichier client </a>
+		</p>
+    <form id="header" action = "ajoutLogo.php" method = "POST" enctype="multipart/form-data">
+	<h5>Veuillez mettre un logo client en .png (optionnel)</h5>
+                    <select id="nom" class="select_stats" name="nom">
+<?php
+$sql_nm = "
+			SELECT id, name, completename AS cname
+			FROM `glpi_entities`";
+
+			$result_nm = $DB->query($sql_nm);
+			$ligne = $DB->fetch_assoc($result_nm);
+ 
+		while($ligne = $DB->fetch_assoc($result_nm)){
+?>		<option value="<?php echo $ligne['name']; ?>" ><?php echo $ligne['name']; ?></option>
+<?php			}
+?>
+	</select>
+        <input type = "file" name = "image1">
+      <input type = "submit" class="mdl-button mdl-button--raised mdl-button--colored">
+      <input type = "reset" class="mdl-button mdl-button--raised mdl-button--colored">
+    </form>
 			<div id="graf_linhas" class="col-md-12" style="height: 450px; margin-top: 20px !important; margin-left: 0px;">
 				<?php if($data_ini == $data_fin) {
 	$datas = "LIKE '".$data_ini."%'";
@@ -751,69 +773,6 @@ echo "                ]
     });
 
 		</script>
-  <script>
-		var chartOptions = {
-			chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            title: {
-                text: 'Répartition par Etat'
-            },
-            tooltip: {
-        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    size: '85%',
- 					dataLabels: {
-								format: '{point.y} - ( {point.percentage:.1f}% )',
-                   		style: {
-                        	color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        		},
-                        connectorColor: 'black'
-                    },
-                showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                name: '".__('Tickets','dashboard')."',
-                data: [
-                    {
-                        name: '" . Ticket::getStatus($grf2[0]) . "',
-                        y: $quant2[0],
-                        sliced: true,
-                        selected: true
-                    },";
-                    
-for($i = 1; $i < $conta; $i++) {    
-     echo '[ "' . Ticket::getStatus($grf2[$i]) . '", '.$quant2[$i].'],';
-        }                    
-                                                         
-echo "                ]
-            }]
-        };
-	var data = {
-    options: JSON.stringify(chartOptions),
-    filename: 'image',
-    type: 'image/png',
-    async: true
-};
-	var exportUrl = 'http://export.highcharts.com/';
-	$.post(exportUrl, data, function(data) {
-		var url = exportUrl + data;
-		var site = url;
-		$.ajax({
-			url : 'graph1.php', // on donne l'URL du fichier de traitement
-			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 2
-		});
-	});
-    </script>
 ";
 ?>
 			</div>
@@ -1016,7 +975,7 @@ echo "                ],
 		$.ajax({
 			url : 'graph1.php', // on donne l'URL du fichier de traitement
 			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 3
+			data : 'site=' + site + '&numero=' + 2
 		});
 	});
     </script>
@@ -1179,7 +1138,7 @@ echo "                ],
 		$.ajax({
 			url : 'graph1.php', // on donne l'URL du fichier de traitement
 			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 4
+			data : 'site=' + site + '&numero=' + 3
 		});
 	});
     </script>
@@ -1344,7 +1303,7 @@ echo "                ],
 		$.ajax({
 			url : 'graph1.php', // on donne l'URL du fichier de traitement
 			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 5
+			data : 'site=' + site + '&numero=' + 4
 		});
 	});
     </script>
@@ -1510,7 +1469,7 @@ echo "                ],
 		$.ajax({
 			url : 'graph1.php', // on donne l'URL du fichier de traitement
 			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 6
+			data : 'site=' + site + '&numero=' + 5
 		});
 	});
     </script>
@@ -1676,7 +1635,7 @@ echo "                ],
 		$.ajax({
 			url : 'graph1.php', // on donne l'URL du fichier de traitement
 			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 7
+			data : 'site=' + site + '&numero=' + 6
 		});
 	});
     </script>
@@ -1809,86 +1768,7 @@ $(function () {
     });
 });
     
-</script><script>
-		var chartOptions = {
-			chart: {
-            type: 'column'
-        },
-        title: {
-            text: '".__('Time spent by requester group','dashboard')."'
-        },
-        xAxis: {
-            categories: ['" ._n('Group','Groups',2). "']
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: '" ._n('Hour','Hours',2)."'
-            },
-            stackLabels: {
-                enabled: true,
-                style: {
-                    fontWeight: 'bold',
-                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                }
-            }
-        },
-
-        tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +                    
-                    Highcharts.numberFormat(this.y, 2) + ' h<br>' +
-                    'Total: ' + Highcharts.numberFormat(this.point.stackTotal, 2) + ' h';
-            }
-        },
-        plotOptions: {
-            column: {
-                stacking: 'normal',
-                dataLabels: {
-						  type: 'datetime',
-  		              dateTimeLabelFormats: {
-               	  hour: '%H:%M'
-            			}, 
-            		formatter: function() 
-            		{
-                  return ''+ Highcharts.numberFormat(this.y, 2) + ' h';
-            		},               	
-                	  //format: '{point.y} h - ( {point.percentage:.1f}% )',                	  
-                    enabled: true,
-                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-                    style: {
-                        textShadow: '0 0 3px black, 0 0 3px black'
-                    }
-                }
-            }
-        },
-        series: [ ";
-          for($i = 0; $i < $conta; $i++) {  
-          	if(date('H:i',mktime(0,0,$quantt2[$i])) != 0) {  
-						echo "{ name: '". $grft2[$i]."',"	;	
-						echo "data: [".date('H',mktime(0,0,$quantt2[$i]))."] },";			
-					}
-			}				
-        
-        echo "]
-        };
-	var data = {
-    options: JSON.stringify(chartOptions),
-    filename: 'image',
-    type: 'image/png',
-    async: true
-};
-	var exportUrl = 'http://export.highcharts.com/';
-	$.post(exportUrl, data, function(data) {
-		var url = exportUrl + data;
-		var site = url;
-		$.ajax({
-			url : 'graph1.php', // on donne l'URL du fichier de traitement
-			type : 'POST', // la requête est de type POST
-			data : 'site=' + site + '&numero=' + 8
-		});
-	});
-    </script>
+</script>
 ";
 
 					}
