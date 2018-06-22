@@ -1,5 +1,118 @@
 <?php
 
+include ("../../../../inc/includes.php");
+include ("../../../../inc/config.php");
+
+Session::checkLoginUser();
+Session::checkRight("profile", READ);
+
+global $DB;
+
+//BEGIN BDD
+
+$datas = "BETWEEN '".$_GET["date1"]." 00:00:00' AND '".$_GET["date2"]." 23:59:59'";
+$id_ent = $_GET["id"];
+
+//Base de donnée -> Liste des incidents critiques et majeurs
+$query2 = "
+			SELECT name
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 3
+			AND type = 1
+			ORDER BY date";
+
+			$critiqueetmajeur = $DB->query($query2) or die('erro');
+
+//Base de donnée -> Somme du temps des incidents critiques et majeurs
+$query2 = "
+			SELECT SUM(waiting_duration+actiontime) as temps
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 3
+			AND type = 1";
+
+			$critiqueetmajeurtemps = $DB->query($query2) or die('erro');
+
+//Base de donnée -> Liste des incidents critique
+$query = "
+			SELECT name
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 2
+			AND type = 1
+			ORDER BY date";
+
+			$critique = $DB->query($query) or die('erro');
+			
+//Base de donnée -> Somme du temps des incidents critique
+$query = "
+			SELECT SUM(waiting_duration+actiontime) as temps
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 2
+			AND type = 1";
+
+			$critiquetemps = $DB->query($query) or die('erro');
+
+//Base de donnée -> Liste des incidents mineurs
+$query3 = "
+			SELECT name
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 1
+			AND type = 1
+			ORDER BY date";
+
+			$mineur = $DB->query($query3) or die('erro');
+			
+//Base de donnée -> Somme du temps des incidents mineurs
+$query3 = "
+			SELECT SUM(waiting_duration+actiontime) as temps
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 1
+			AND type = 1";
+
+			$mineurtemps = $DB->query($query3) or die('erro');
+			
+//Base de donnée -> Liste des suivis
+$query3 = "
+			SELECT glpi_tickettasks.content as textesuivi, glpi_tickettasks.actiontime as temps
+			FROM glpi_tickets
+			JOIN glpi_tickettasks ON glpi_tickets.id=glpi_tickettasks.tickets_id
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND glpi_tickets.type = 3
+			ORDER BY glpi_tickets.date";
+
+			$suivi = $DB->query($query3) or die('erro');
+			
+//Base de donnée -> Suivis somme du temps
+$query3 = "
+			SELECT SUM(glpi_tickettasks.actiontime) as temps
+			FROM glpi_tickets
+			JOIN glpi_tickettasks ON glpi_tickets.id=glpi_tickettasks.tickets_id
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND glpi_tickets.type = 3";
+
+			$tempssuivi = $DB->query($query3) or die('erro');
+
 //Nombre d'image
 $nb=1;
 for($j=1;$j<10;$j++){
@@ -9,7 +122,7 @@ for($j=1;$j<10;$j++){
 }
 
                                         
-//REQUIRE
+//REQUIRE DOC
 require_once 'vendor/autoload.php';
 
 //Création du doc
@@ -141,30 +254,124 @@ $section->addTextBreak(2);
 for($n=1;$nb>=$n;$n++){
     if(file_exists("images/{$n}.png")){
         $section->addImage('images/'.$n.'.png',array('height' => 280,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
-        $section->addTextBreak(5);
-    }else{
-        //$section->addImage('images/defaut.png',array('width' => 150,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+        $section->addTextBreak(4);
     }
 }
 $section->addTextBreak(2);
+
+//Incidents critiques et majeurs
 $section->addTitle('Incidents Critiques et Majeurs', 1);
-$section->addText('Some text...');
 $section->addTextBreak(2);
+$tableStyle = array(
+    'borderColor' => '006699',
+    'borderSize'  => 6,
+    'cellMargin'  => 50
+);
+$firstRowStyle = array('bgColor' => '66BBFF');
+$phpWord->addTableStyle('myTable', $tableStyle, $firstRowStyle);
+$cellRowSpan = array('vMerge' => 'restart','bgColor' => '8F8F8F');
+$cellRowContinue = array('vMerge' => 'continue');
+$cellColSpan = array('gridSpan' => 2);
+
+$table = $section->addTable('myTable');
+
+$table->addRow();
+$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(2000, null);
+
+while($ligne=$DB->fetch_assoc($critiqueetmajeur)){
+	$table->addRow();
+	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+}
+$table->addRow();
+$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+
+$table->addRow();
+$ligne=$DB->fetch_assoc($critiqueetmajeurtemps);
+$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+
+$section->addTextBreak(2);
+
+//Incidents critiques
 $section->addTitle('Incidents Critiques', 1);
-$section->addText('Some text...');
 $section->addTextBreak(2);
+$table = $section->addTable('myTable');
+
+$table->addRow();
+$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(2000, null);
+
+while($ligne=$DB->fetch_assoc($critique)){
+	$table->addRow();
+	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+}
+$table->addRow();
+$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+
+$table->addRow();
+$ligne=$DB->fetch_assoc($critiquetemps);
+$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+$section->addTextBreak(2);
+
+//Incidents mineurs
 $section->addTitle('Incidents Mineurs', 1);
-$section->addText('Some text...');
 $section->addTextBreak(2);
+$table = $section->addTable('myTable');
+
+$table->addRow();
+$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(2000, null);
+
+while($ligne=$DB->fetch_assoc($mineur)){
+	$table->addRow();
+	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+}
+$table->addRow();
+$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+
+$table->addRow();
+$ligne=$DB->fetch_assoc($mineurtemps);
+$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+$section->addTextBreak(2);
+
+
+//Changement
 $section->addTitle('Changement', 1);
-$section->addText('Some text...');
 $section->addTextBreak(2);
+$section->addText('?',array('color'=> '313131','size' => 12));
+$section->addTextBreak(2);
+
+//Actions de suivi
+
 $section->addTitle('Actions de suivi', 1);
-$section->addText('Some text...');
+$section->addTextBreak(2);
+$table = $section->addTable('myTable');
+
+$table->addRow();
+$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(1000, $cellRowSpan)->addText("Temps passé",array('color'=> '313131','size' => 12));
+
+$table->addRow();
+$table->addCell(2000)->addText("SUIVI",array('color'=> '313131','size' => 12));
+$ligne=$DB->fetch_assoc($tempssuivi);
+$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+
+while($ligne=$DB->fetch_assoc($suivi)){
+	$table->addRow();
+	$table->addCell(2000)->addText($ligne['textesuivi'],array('color'=> '313131','size' => 12));
+	$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
+}
+
 $section->addTextBreak(2);
 
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.docx"');
+header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.odt"');
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 $objWriter->save('php://output');

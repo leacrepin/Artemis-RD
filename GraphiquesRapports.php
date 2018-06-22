@@ -224,7 +224,6 @@ $selected = $id_ent;
 						<tr>
 							<td colspan="2" align="center" style="">
 								<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-								<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_entidade.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 							</td>
 						</tr>
 
@@ -292,6 +291,7 @@ $selected = $id_ent;
 
 			$result2 = $DB->query($query2) or die('erro');
 			$total = $DB->fetch_assoc($result2);
+			
 
 //count by status
 $query_stat = "
@@ -398,10 +398,8 @@ echo '<div id="name"  style="margin-top: 15px;"><span>'.$ent_name['name'].'</spa
 	    odometer4.innerHTML = <?php echo $close; ?>;
 	}, 1000);
 </script>
+			<a tabindex="-1" href=<?php echo "telechargementdoc.php?id=".$id_ent."&date1=".$data_ini."&date2=".$data_fin."&con=1&entreprise=".$ent_name['name']."&date=".$data_ini."à".$data_fin ; ?> target="_blank"> Télécharger le fichier client </a>
 			
-			<form id="header" action = <?php echo "telechargementdoc.php?entreprise=".$ent_name['name']."&date=".$month ; ?> method = "POST" enctype="multipart/form-data">
-			<input type="submit" name="Télécharger le fichier client" value="Télécharger le fichier client" >
-			</form>
 			<div id="graf_linhas" class="col-md-12" style="height: 450px; margin-top: 20px !important; margin-left: 0px;">
 				<?php if($data_ini == $data_fin) {
 	$datas = "LIKE '".$data_ini."%'";
