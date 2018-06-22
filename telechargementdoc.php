@@ -10,10 +10,11 @@ global $DB;
 
 //Fonction pour convertir le temps
 function convertirTemps($duree){
-	$heures=intval($duree / 3600);
+	$jour=intval(($duree / 3600) / 24);
+	$heures=intval(($duree / 3600)% 24);
 	$minutes=intval(($duree % 3600) / 60);
 	$secondes=intval((($duree % 3600) % 60));
-	return($heures.":".$minutes.":".$secondes);
+	return($jour."j ".$heures."h ".$minutes."m ".$secondes."s ");
 }
 
 //BEGIN BDD
@@ -21,6 +22,57 @@ function convertirTemps($duree){
 $datas = "BETWEEN '".$_GET["date1"]." 00:00:00' AND '".$_GET["date2"]." 23:59:59'";
 $date = "du ".$_GET["date1"]." au ".$_GET["date2"];
 $id_ent = $_GET["id"];
+
+//Calcul de la date (si il s'agit d'un mois en particulier ou non)
+
+function bissextile($a){
+	if($a%400==0||(($a%4==0)&($a%100!=0))){
+		return(29);//année bissextile
+	}else{
+		return(28);//année non bissextile
+	}
+}
+
+$moisLettres=array('Janvier','Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre');
+
+function nombreDeJour($mois, $a){
+	if($mois==2){
+		return(bissextile($a));
+	}else{//mois!=2
+		if($mois==4 ||$mois==6 ||$mois==9 ||$mois==11){
+			return(30);
+		}else{
+			return(31);
+		}
+	}
+}
+$jour1=substr($_GET["date1"], -2);
+$jour2=substr($_GET["date2"], -2);
+$mois1=substr($_GET["date1"], -5, 2);
+$mois2=substr($_GET["date2"], -5, 2);
+$année1=substr($_GET["date1"], -10,4);
+$année2=substr($_GET["date2"], -10,4);
+
+if($jour1=="01" && $jour2==nombreDeJour((int)$mois1,(int)$année1) && $année1==$année2 && $mois1==$mois2){
+	$date = $moisLettres[(int) $mois1-1].' '.$année1;
+}
+//Base de donnée -> Recherche s'il y a des problèmes de catégorie
+
+$query2 = "
+			SELECT COUNT(id) as nb
+			FROM glpi_tickets 
+			WHERE glpi_tickets.date ".$datas." 
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND glpi_tickets.type = 1
+			AND glpi_tickets.itilcategories_id = 0
+			ORDER BY date";
+
+			$erreur = $DB->query($query2) or die('erro');
+			$ligne=$DB->fetch_assoc($erreur);
+			if($ligne['nb']!=0){
+				die('Erreur: Il manque des catégories !');
+			}
 
 //Base de donnée -> Liste des incidents critiques et majeurs
 $query2 = "
@@ -37,7 +89,7 @@ $query2 = "
 
 //Base de donnée -> Somme du temps des incidents critiques et majeurs
 $query2 = "
-			SELECT SUM(waiting_duration+actiontime) as temps
+			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -62,7 +114,7 @@ $query = "
 			
 //Base de donnée -> Somme du temps des incidents critique
 $query = "
-			SELECT SUM(waiting_duration+actiontime) as temps
+			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -87,7 +139,7 @@ $query3 = "
 			
 //Base de donnée -> Somme du temps des incidents mineurs
 $query3 = "
-			SELECT SUM(waiting_duration+actiontime) as temps
+			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -293,8 +345,8 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($critiqueetmajeurtemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(2);
 
@@ -317,8 +369,8 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($critiquetemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
 $section->addTextBreak(2);
 
 //Incidents mineurs
@@ -340,8 +392,8 @@ $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131'
 
 $table->addRow();
 $ligne=$DB->fetch_assoc($mineurtemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps'])." h",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("à faire",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
 $section->addTextBreak(2);
 
 
