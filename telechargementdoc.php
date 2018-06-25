@@ -71,7 +71,22 @@ $query2 = "
 			$erreur = $DB->query($query2) or die('erro');
 			$ligne=$DB->fetch_assoc($erreur);
 			if($ligne['nb']!=0){
-				die('Erreur: Il manque des catégories !');
+				$query2 = "
+				SELECT id
+				FROM glpi_tickets 
+				WHERE glpi_tickets.date ".$datas." 
+				AND glpi_tickets.is_deleted = 0
+				AND glpi_tickets.entities_id = ".$id_ent."
+				AND glpi_tickets.type = 1
+				AND glpi_tickets.itilcategories_id = 0
+				ORDER BY date";
+
+				$erreur = $DB->query($query2) or die('erro');
+				$str="Erreur: Il manque des catégories !(Ticket(s):";
+				while($ligne=$DB->fetch_assoc($erreur)){
+					$str=$str." ".$ligne['id'];
+				}
+				die($str.")");
 			}
 
 //Base de donnée -> Liste des incidents critiques et majeurs
@@ -148,6 +163,31 @@ $query3 = "
 			AND type = 1";
 
 			$mineurtemps = $DB->query($query3) or die('erro');
+			
+//Base de donnée -> Liste des changements
+$query3 = "
+			SELECT name
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 1
+			AND type = 5
+			ORDER BY date";
+
+			$changement = $DB->query($query3) or die('erro');
+			
+//Base de donnée -> Somme du temps des changements
+$query3 = "
+			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
+			FROM glpi_tickets
+			WHERE glpi_tickets.date ".$datas."
+			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.entities_id = ".$id_ent."
+			AND priority = 1
+			AND type = 5";
+
+			$changementtemps = $DB->query($query3) or die('erro');
 			
 //Base de donnée -> Liste des suivis
 $query3 = "
@@ -400,7 +440,24 @@ $section->addTextBreak(2);
 //Changement
 $section->addTitle('Changement', 1);
 $section->addTextBreak(2);
-$section->addText('?',array('color'=> '313131','size' => 12));
+$table = $section->addTable('myTable');
+
+$table->addRow();
+$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(2000, null);
+
+while($ligne=$DB->fetch_assoc($changement)){
+	$table->addRow();
+	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+}
+$table->addRow();
+$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+
+$table->addRow();
+$ligne=$DB->fetch_assoc($changementtemps);
+$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
 $section->addTextBreak(2);
 
 //Actions de suivi

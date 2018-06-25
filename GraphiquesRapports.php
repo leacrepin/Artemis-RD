@@ -748,27 +748,33 @@ if ($conta < 1){
     $grft2[0] = __('Changement');
   }
 }
+function convertirTemps($duree){
+	$heures=intval(($duree / 3600));
+	$minutes=intval(($duree % 3600) / 60);
+	return($heures.":".$minutes." H");
+}
+
 // Si il y a + de 1 types
 if($conta >= 1) {
 	if ($test[0]  >= 86400)
-  $grft2[0] = "Incident " . ' ' . date('d:H:i', $test[0] - 3600*24) . " J";
+  $grft2[0] = "Incident " . ' ' . convertirTemps($test[0]);
 	else
 	{
 		$grft2[0] = "Incident " . ' ' . date('H:i', $test[0] - 3600) . " H";
 	}
 	if ($test[1]  >= 86400)
-  $grft2[1] = "Suivi" . ' ' . date('d:H:i', $test[1] - 3600*24) . " J";
+  $grft2[1] = "Suivi" . ' ' . convertirTemps($test[1]);
 	else
 	{
 	 $grft2[1] = "Suivi" . ' ' . date('H:i', $test[1] - 3600) . " H";
 	}
 	if ($test[2]  >= 86400)
-  $grft2[2] = "Evenement" . ' ' . date('d:H:i', $test[2] - 3600*24) . " J";
+  $grft2[2] = "Evenement" . ' ' . convertirTemps($test[2]);
 	else{
 		$grft2[2] = "Evenement" . ' ' . date('H:i', $test[2] - 3600) . " H";
 	}
 	if ($test[3]  >= 86400)
-  $grft2[3] = "Changement" . ' ' . date('d:H:i', $test[3] - 3600*24) . " J";
+  $grft2[3] = "Changement" . ' ' . convertirTemps($test[3]);
 	else{
 	$grft2[3] = "Changement" . ' ' . date('H:i', $test[3] - 3600) . " H";
 	}
