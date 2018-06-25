@@ -355,9 +355,7 @@ for($n=1;$nb>=$n;$n++){
 }
 $section->addTextBreak(2);
 
-//Incidents critiques et majeurs
-$section->addTitle('Incidents Critiques et Majeurs', 1);
-$section->addTextBreak(2);
+
 $tableStyle = array(
     'borderColor' => '006699',
     'borderSize'  => 6,
@@ -369,11 +367,18 @@ $cellRowSpan = array('vMerge' => 'restart','bgColor' => '8F8F8F');
 $cellRowContinue = array('vMerge' => 'continue');
 $cellColSpan = array('gridSpan' => 2);
 
+
+//Incidents critiques et majeurs
+$temps=$DB->fetch_assoc($critiqueetmajeurtemps);
+if($temps['temps']!=0){
+$section->addTitle('Incidents Critiques et Majeurs', 1);
+$section->addTextBreak(2);
+
 $table = $section->addTable('myTable');
 
 $table->addRow();
-$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(2000, null);
+$table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(3000, null);
 
 while($ligne=$DB->fetch_assoc($critiqueetmajeur)){
 	$table->addRow();
@@ -384,20 +389,23 @@ $table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '
 $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$ligne=$DB->fetch_assoc($critiqueetmajeurtemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(2);
+}
+
 
 //Incidents critiques
+$temps=$DB->fetch_assoc($critiquetemps);
+if($temps['temps']!=0){
 $section->addTitle('Incidents Critiques', 1);
 $section->addTextBreak(2);
 $table = $section->addTable('myTable');
 
 $table->addRow();
-$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(2000, null);
+$table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(3000, null);
 
 while($ligne=$DB->fetch_assoc($critique)){
 	$table->addRow();
@@ -408,19 +416,22 @@ $table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '
 $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$ligne=$DB->fetch_assoc($critiquetemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+
 $section->addTextBreak(2);
+}
 
 //Incidents mineurs
+$temps=$DB->fetch_assoc($mineurtemps);
+if($temps['temps']!=0){
 $section->addTitle('Incidents Mineurs', 1);
 $section->addTextBreak(2);
 $table = $section->addTable('myTable');
 
 $table->addRow();
-$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(2000, null);
+$table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(3000, null);
 
 while($ligne=$DB->fetch_assoc($mineur)){
 	$table->addRow();
@@ -431,20 +442,23 @@ $table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '
 $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$ligne=$DB->fetch_assoc($mineurtemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+
 $section->addTextBreak(2);
+}
 
 
 //Changement
+$temps=$DB->fetch_assoc($changementtemps);
+if($temps['temps']!=0){
 $section->addTitle('Changement', 1);
 $section->addTextBreak(2);
 $table = $section->addTable('myTable');
 
 $table->addRow();
-$table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(2000, null);
+$table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
+$table->addCell(3000, null);
 
 while($ligne=$DB->fetch_assoc($changement)){
 	$table->addRow();
@@ -455,10 +469,15 @@ $table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '
 $table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$ligne=$DB->fetch_assoc($changementtemps);
-$table->addCell(2000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($ligne['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+
 $section->addTextBreak(2);
+}else{
+	$section->addTitle('Changement', 1);
+	$section->addTextBreak(2);
+	$section->addText("Pas de changement sur la période",array('color'=> '313131','size' => 12));
+}
 
 //Actions de suivi
 
@@ -468,7 +487,7 @@ $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(1000, $cellRowSpan)->addText("Temps passé",array('color'=> '313131','size' => 12));
+$table->addCell(2000, $cellRowSpan)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 $table->addRow();
 $table->addCell(2000)->addText("SUIVI",array('color'=> '313131','size' => 12));
