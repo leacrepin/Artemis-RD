@@ -232,13 +232,13 @@ $phpWord->getSettings()->setThemeFontLang($fr);
 
 $font=$phpWord->addFontStyle('rStyle', array('color'=> '313131','name' => 'Calibri', 'size' => '36','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
 $font->setSmallCaps();
-$font2=$phpWord->addFontStyle('titre table matiere', array('color'=> '1A9386','name' => 'Calibri', 'size' => '14','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
+$font2=$phpWord->addFontStyle('titre table matiere', array('color'=> '0099B1','name' => 'Calibri', 'size' => '14','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
 $font2->setSmallCaps();
-$font4=$phpWord->addFontStyle('Artemis-RD',array('color'=> '1A9386','name' => 'Calibri', 'size' => '10'));
+$font4=$phpWord->addFontStyle('Artemis-RD',array('color'=> '0099B1','name' => 'Calibri', 'size' => '10'));
 $font4->setBold();
-$font5=$phpWord->addFontStyle('LigneVerte',array('color'=> '1A9386','name' => 'Calibri', 'size' => '10.5'));
+$font5=$phpWord->addFontStyle('LigneVerte',array('color'=> '0099B1','name' => 'Calibri', 'size' => '10.5'));
 $font5->setBold();
-$font6=$phpWord->addFontStyle('date', array('color'=> '1A9386','name' => 'Calibri', 'size' => '36', 'bold' => 'true','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
+$font6=$phpWord->addFontStyle('date', array('color'=> '0099B1','name' => 'Calibri', 'size' => '36', 'bold' => 'true','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
 $font6->setSmallCaps();
 
 //Numérotation Titres
@@ -328,7 +328,7 @@ for($i=1; $i<=17; $i++){
 }
 $pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes',
-		array('name' => 'Calibri', 'size' => '10'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
+		array('name' => 'Calibri', 'size' => '10', 'color'=> '57585A'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
     );
 $pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
 $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
