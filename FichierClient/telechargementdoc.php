@@ -66,6 +66,7 @@ $query2 = "
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND glpi_tickets.type = 1
 			AND glpi_tickets.itilcategories_id = 0
+			AND glpi_tickets.status = '6'
 			ORDER BY date";
 
 			$erreur = $DB->query($query2) or die('erro');
@@ -79,6 +80,7 @@ $query2 = "
 				AND glpi_tickets.entities_id = ".$id_ent."
 				AND glpi_tickets.type = 1
 				AND glpi_tickets.itilcategories_id = 0
+				AND glpi_tickets.status = '6'
 				ORDER BY date";
 
 				$erreur = $DB->query($query2) or die('erro');
@@ -98,6 +100,7 @@ $query2 = "
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 3
 			AND type = 1
+			AND glpi_tickets.status = '6'
 			ORDER BY date";
 
 			$critiqueetmajeur = $DB->query($query2) or die('erro');
@@ -110,6 +113,7 @@ $query2 = "
 			AND glpi_tickets.is_deleted = 0
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 3
+			AND glpi_tickets.status = '6'
 			AND type = 1";
 
 			$critiqueetmajeurtemps = $DB->query($query2) or die('erro');
@@ -123,6 +127,7 @@ $query = "
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 2
 			AND type = 1
+			AND glpi_tickets.status = '6'
 			ORDER BY date";
 
 			$critique = $DB->query($query) or die('erro');
@@ -135,6 +140,7 @@ $query = "
 			AND glpi_tickets.is_deleted = 0
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 2
+			AND glpi_tickets.status = '6'
 			AND type = 1";
 
 			$critiquetemps = $DB->query($query) or die('erro');
@@ -148,6 +154,7 @@ $query3 = "
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 1
 			AND type = 1
+			AND glpi_tickets.status = '6'
 			ORDER BY date";
 
 			$mineur = $DB->query($query3) or die('erro');
@@ -160,6 +167,7 @@ $query3 = "
 			AND glpi_tickets.is_deleted = 0
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 1
+			AND glpi_tickets.status = '6'
 			AND type = 1";
 
 			$mineurtemps = $DB->query($query3) or die('erro');
@@ -173,6 +181,7 @@ $query3 = "
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 1
 			AND type = 5
+			AND glpi_tickets.status = '6'
 			ORDER BY date";
 
 			$changement = $DB->query($query3) or die('erro');
@@ -185,6 +194,7 @@ $query3 = "
 			AND glpi_tickets.is_deleted = 0
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND priority = 1
+			AND glpi_tickets.status = '6'
 			AND type = 5";
 
 			$changementtemps = $DB->query($query3) or die('erro');
@@ -198,6 +208,7 @@ $query3 = "
 			AND glpi_tickets.is_deleted = 0
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND glpi_tickets.type = 3
+			AND glpi_tickets.status = '6'
 			ORDER BY glpi_tickets.date";
 
 			$suivi = $DB->query($query3) or die('erro');
@@ -209,6 +220,7 @@ $query3 = "
 			JOIN glpi_tickettasks ON glpi_tickets.id=glpi_tickettasks.tickets_id
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
+			AND glpi_tickets.status = '6'
 			AND glpi_tickets.entities_id = ".$id_ent."
 			AND glpi_tickets.type = 3";
 
