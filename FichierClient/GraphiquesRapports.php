@@ -75,6 +75,26 @@ global $DB;
 
 global $DB;
 
+function bissextile($a){
+	if($a%400==0||(($a%4==0)&($a%100!=0))){
+		return(29);//année bissextile
+	}else{
+		return(28);//année non bissextile
+	}
+}
+
+function nombreDeJour($mois, $a){
+	if($mois==2){
+		return(bissextile($a));
+	}else{//mois!=2
+		if($mois==4 ||$mois==6 ||$mois==9 ||$mois==11){
+			return(30);
+		}else{
+			return(31);
+		}
+	}
+}
+
 if(!empty($_POST['submit']))
 {
 	$data_ini =  $_POST['date1'];
@@ -82,8 +102,8 @@ if(!empty($_POST['submit']))
 }
 
 else {
-	$data_ini = date("Y-01-01");
-	$data_fin = date("Y-m-d");
+	$data_ini = date("Y-m-01");
+	$data_fin = date("Y-m-".nombreDeJour(date("m"), date("Y")));
 }
 
 
@@ -742,10 +762,10 @@ if ($conta < 1){
     $grft2[0] = __('Suivi');
   }
   if ($grft2[0] == 4){
-    $grft2[0] = __('Evenement');
+    $grft2[0] = __('Changement');
   }
   if ($grft2[0] == 5){
-    $grft2[0] = __('Changement');
+    $grft2[0] = __('Evenement');
   }
 }
 function convertirTemps($duree){
@@ -769,14 +789,14 @@ if($conta >= 1) {
 	 $grft2[1] = "Suivi" . ' ' . date('H:i', $test[1] - 3600) . " H";
 	}
 	if ($test[2]  >= 86400)
-  $grft2[2] = "Evenement" . ' ' . convertirTemps($test[2]);
+  $grft2[2] = "Changement" . ' ' . convertirTemps($test[2]);
 	else{
-		$grft2[2] = "Evenement" . ' ' . date('H:i', $test[2] - 3600) . " H";
+		$grft2[2] = "Changement" . ' ' . date('H:i', $test[2] - 3600) . " H";
 	}
 	if ($test[3]  >= 86400)
-  $grft2[3] = "Changement" . ' ' . convertirTemps($test[3]);
+  $grft2[3] = "Evenement" . ' ' . convertirTemps($test[3]);
 	else{
-	$grft2[3] = "Changement" . ' ' . date('H:i', $test[3] - 3600) . " H";
+	$grft2[3] = "Evenement" . ' ' . date('H:i', $test[3] - 3600) . " H";
 	}
 }
 
