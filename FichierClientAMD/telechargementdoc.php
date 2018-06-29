@@ -93,7 +93,7 @@ $query2 = "
 
 //Base de donnée -> Liste des incidents critiques et majeurs
 $query2 = "
-			SELECT name, solve_delay_stat as temps
+			SELECT name, solve_delay_stat as temps, actiontime as temps2
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -107,7 +107,7 @@ $query2 = "
 
 //Base de donnée -> Somme du temps des incidents critiques et majeurs
 $query2 = "
-			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
+			SELECT SUM(actiontime) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -120,7 +120,7 @@ $query2 = "
 
 //Base de donnée -> Liste des incidents critique
 $query = "
-			SELECT name, solve_delay_stat as temps
+			SELECT name, actiontime as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -134,7 +134,7 @@ $query = "
 			
 //Base de donnée -> Somme du temps des incidents critique
 $query = "
-			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
+			SELECT SUM(actiontime) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -147,7 +147,7 @@ $query = "
 
 //Base de donnée -> Liste des incidents mineurs
 $query3 = "
-			SELECT name, solve_delay_stat as temps
+			SELECT name, actiontime as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -161,7 +161,7 @@ $query3 = "
 			
 //Base de donnée -> Somme du temps des incidents mineurs
 $query3 = "
-			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
+			SELECT SUM(actiontime) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -174,7 +174,7 @@ $query3 = "
 			
 //Base de donnée -> Liste des changements
 $query3 = "
-			SELECT name, solve_delay_stat as temps
+			SELECT name, actiontime as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -188,7 +188,7 @@ $query3 = "
 			
 //Base de donnée -> Somme du temps des changements
 $query3 = "
-			SELECT SUM(solve_delay_stat) as temps, AVG(solve_delay_stat) as moyenne
+			SELECT SUM(actiontime) as temps, AVG(solve_delay_stat) as moyenne
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -335,9 +335,7 @@ $pagedegarde->addText(
 		'rStyle2',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
 
-
 //Barre ArtemisRD
-/*
 $pagedegarde->addTextBreak(8);
 $pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes',
@@ -345,7 +343,7 @@ $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîme
     );
 $pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)));
-*/
+
 
 
 //------------------Table des matières--------------------
@@ -382,6 +380,11 @@ $tableStyle = array(
 	'borderBottomSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
 );
 $phpWord->addTableStyle('myTable', $tableStyle);
+$tableStyle = array(
+    'borderColor' => '000000',
+	'borderSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
+);
+$phpWord->addTableStyle('myTable2', $tableStyle);
 //Gris->'8F8F8F' BleuArtemis->'0099B1'
 $cellRowSpan = array('bgColor' => '0099B1');//Colonne de gauche
 $cellRowSpan2 = array('bgColor' => '0099B1');//Colonne de droite
@@ -406,11 +409,14 @@ while($ligne=$DB->fetch_assoc($critiqueetmajeur)){
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+
+$section->addTextBreak(1);
+$table = $section->addTable('myTable2');
 
 $table->addRow();
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
 }
@@ -434,11 +440,14 @@ while($ligne=$DB->fetch_assoc($critique)){
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+
+$section->addTextBreak(1);
+$table = $section->addTable('myTable2');
 
 $table->addRow();
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
 }
@@ -461,11 +470,14 @@ while($ligne=$DB->fetch_assoc($mineur)){
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+
+$section->addTextBreak(1);
+$table = $section->addTable('myTable2');
 
 $table->addRow();
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
 }
@@ -489,11 +501,14 @@ while($ligne=$DB->fetch_assoc($changement)){
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+
+$section->addTextBreak(1);
+$table = $section->addTable('myTable2');
 
 $table->addRow();
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
 }else{
