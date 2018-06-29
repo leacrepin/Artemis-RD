@@ -91,7 +91,7 @@ $query2 = "
 
 //Base de donnée -> Liste des incidents critiques et majeurs
 $query2 = "
-			SELECT name
+			SELECT name, solve_delay_stat as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -116,7 +116,7 @@ $query2 = "
 
 //Base de donnée -> Liste des incidents critique
 $query = "
-			SELECT name
+			SELECT name, solve_delay_stat as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -141,7 +141,7 @@ $query = "
 
 //Base de donnée -> Liste des incidents mineurs
 $query3 = "
-			SELECT name
+			SELECT name, solve_delay_stat as temps
 			FROM glpi_tickets
 			WHERE glpi_tickets.date ".$datas."
 			AND glpi_tickets.is_deleted = 0
@@ -230,15 +230,15 @@ $phpWord->getSettings()->setThemeFontLang($fr);
 
 //Fonts Texte
 
-$font=$phpWord->addFontStyle('rStyle', array('color'=> '313131','name' => 'Calibri', 'size' => '36','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
+$font=$phpWord->addFontStyle('rStyle', array('color'=> '313131','name' => 'Calibri', 'size' => '36'));
 $font->setSmallCaps();
-$font2=$phpWord->addFontStyle('titre table matiere', array('color'=> '0099B1','name' => 'Calibri', 'size' => '14','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
+$font2=$phpWord->addFontStyle('titre table matiere', array('color'=> '0099B1','name' => 'Calibri', 'size' => '14'));
 $font2->setSmallCaps();
 $font4=$phpWord->addFontStyle('Artemis-RD',array('color'=> '0099B1','name' => 'Calibri', 'size' => '10'));
 $font4->setBold();
 $font5=$phpWord->addFontStyle('LigneVerte',array('color'=> '0099B1','name' => 'Calibri', 'size' => '10.5'));
 $font5->setBold();
-$font6=$phpWord->addFontStyle('date', array('color'=> '0099B1','name' => 'Calibri', 'size' => '36', 'bold' => 'true','spaceBefore' => 0.32, 'spaceAfter' => 0.32));
+$font6=$phpWord->addFontStyle('rStyle2', array('color'=> '0099B1','name' => 'Calibri', 'size' => '36'));
 $font6->setSmallCaps();
 
 //Numérotation Titres
@@ -266,6 +266,7 @@ $phpWord->addTitleStyle(1, array('color'=> '313131','size' => 16), array('numSty
 
 //Section
 $pagedegarde = $phpWord->addSection();
+$tabledesmatieres = $phpWord->addSection();
 $section = $phpWord->addSection();
 
 //Numérotation des pages
@@ -278,15 +279,19 @@ $footer->addImage('images/ArtemisRD.png',array('height' => 50, 'alignment' => \P
 //Logo entreprise header
 $header = $section->addHeader();
 if(file_exists('images/'.$_GET["entreprise"].'.png')){
-        $header->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+        $header->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }else{
-        $header->addImage('images/defaut.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+        $header->addImage('images/defaut.png',array('height' => 25,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }
 
+
+
+
+
+
+// -----------------------Page de garde----------------------------
 //logo Entreprise
-for($i=1; $i<=10; $i++){
-    $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-}
+$pagedegarde->addTextBreak(5);
 if(file_exists('images/'.$_GET["entreprise"].'.png')){
 $pagedegarde->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 79,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 }else{
@@ -294,11 +299,7 @@ $pagedegarde->addImage('images/'.$_GET["entreprise"].'.png',array('height' => 79
 }
 
 
-// Page de garde
-
-for($i=1; $i<=6; $i++){
-    $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-}
+$pagedegarde->addTextBreak(3);
 
 $pagedegarde->addText(
 		htmlspecialchars(
@@ -319,80 +320,85 @@ $pagedegarde->addText(
 		htmlspecialchars(
 				$date
 		),
-		'date',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
+		'rStyle2',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
 
 //Barre ArtemisRD
-for($i=1; $i<=17; $i++){
-    $pagedegarde->addText(" ",array('name' => 'Calibri', 'size' => '12', 'bold' => 'true'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-}
-$pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
+$pagedegarde->addTextBreak(8);
+$pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes',
-		array('name' => 'Calibri', 'size' => '10', 'color'=> '57585A'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
+		array('name' => 'Calibri', 'size' => '10', 'color'=> '57585A'),[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]
     );
-$pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+$pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
+$pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)));
 
 
 
-//table des matières
-$section->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$section->addText("Table des matières",'titre table matiere',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$section->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
-$section->addTextBreak(2);
-$toc2 = $section->addTOC($font3,$fontStyle);
-$section->addText('PS: Veuillez réactualiser la table des matières si vous voulez les pages ainsi que numéros, pensez à tout remettre en gras comme vous le souhaitez.');
-$section->addPageBreak();
+//------------------Table des matières--------------------
 
-// Body
+$tabledesmatieres->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
+$tabledesmatieres->addText("Table des matières",'titre table matiere',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
+$tabledesmatieres->addText(htmlspecialchars("______________________________________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]);
+$tabledesmatieres->addTextBreak(1);
+$toc2 = $tabledesmatieres->addTOC($font3,$fontStyle);
+$tabledesmatieres->addText('PS: Veuillez réactualiser la table des matières si vous voulez les pages ainsi que numéros, pensez à tout remettre en gras comme vous le souhaitez.');
+$tabledesmatieres->addPageBreak();
+
+// -----------------------Body----------------------------
+
+
+//Bilan des actions
 $section->addTitle('Bilan des actions', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 for($n=1;$nb>=$n;$n++){
     if(file_exists("images/{$n}.png")){
         $section->addImage('images/'.$n.'.png',array('height' => 280,'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
-        $section->addTextBreak(4);
+        $section->addTextBreak(1);
     }
 }
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 
-
+//Style tableaux
 $tableStyle = array(
-    'borderColor' => '006699',
-    'borderSize'  => 6,
-    'cellMargin'  => 50
+    'borderColor' => '000000',
+	'borderSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.5),
+    'borderTopSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6),
+	'borderLeftSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6),
+	'borderRightSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6),
+	'borderBottomSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
 );
-$firstRowStyle = array('bgColor' => '66BBFF');
-$phpWord->addTableStyle('myTable', $tableStyle, $firstRowStyle);
-$cellRowSpan = array('vMerge' => 'restart','bgColor' => '8F8F8F');
-$cellRowContinue = array('vMerge' => 'continue');
-$cellColSpan = array('gridSpan' => 2);
+$phpWord->addTableStyle('myTable', $tableStyle);
+//Gris->'8F8F8F' BleuArtemis->'0099B1'
+$cellRowSpan = array('bgColor' => '0099B1');//Colonne de gauche
+$cellRowSpan2 = array('bgColor' => '0099B1');//Colonne de droite
 
 
 //Incidents critiques et majeurs
 $temps=$DB->fetch_assoc($critiqueetmajeurtemps);
 if($temps['temps']!=0){
 $section->addTitle('Incidents Critiques et Majeurs', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 
 $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(3000, null);
+$table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 while($ligne=$DB->fetch_assoc($critiqueetmajeur)){
 	$table->addRow();
-	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
-$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 }
 
 
@@ -400,52 +406,54 @@ $section->addTextBreak(2);
 $temps=$DB->fetch_assoc($critiquetemps);
 if($temps['temps']!=0){
 $section->addTitle('Incidents Critiques', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(3000, null);
+$table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 while($ligne=$DB->fetch_assoc($critique)){
 	$table->addRow();
-	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
-$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 }
 
 //Incidents mineurs
 $temps=$DB->fetch_assoc($mineurtemps);
 if($temps['temps']!=0){
 $section->addTitle('Incidents Mineurs', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(3000, null);
+$table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 while($ligne=$DB->fetch_assoc($mineur)){
 	$table->addRow();
-	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
-$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 }
 
 
@@ -453,41 +461,43 @@ $section->addTextBreak(2);
 $temps=$DB->fetch_assoc($changementtemps);
 if($temps['temps']!=0){
 $section->addTitle('Changement', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(3000, null);
+$table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 while($ligne=$DB->fetch_assoc($changement)){
 	$table->addRow();
-	$table->addCell(2000)->addText($ligne['name'],array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
-$table->addCell(2000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
+$table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
+$table->addCell(3000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$table->addCell(2000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
-$table->addCell(2000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell()->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 }else{
 	$section->addTitle('Changement', 1);
-	$section->addTextBreak(2);
+	$section->addTextBreak(1);
 	$section->addText("Pas de changement sur la période",array('color'=> '313131','size' => 12));
+	$section->addTextBreak(1);
 }
 
 //Actions de suivi
 
 $section->addTitle('Actions de suivi', 1);
-$section->addTextBreak(2);
+$section->addTextBreak(1);
 $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color'=> '313131','size' => 12));
-$table->addCell(2000, $cellRowSpan)->addText("Temps passé",array('color'=> '313131','size' => 12));
+$table->addCell(2000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 $table->addRow();
 $table->addCell(2000)->addText("SUIVI",array('color'=> '313131','size' => 12));
@@ -496,14 +506,23 @@ $table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '3131
 
 while($ligne=$DB->fetch_assoc($suivi)){
 	$table->addRow();
-	$table->addCell(2000)->addText($ligne['textesuivi'],array('color'=> '313131','size' => 12));
+	$text=$ligne['textesuivi'];
+	$processed = htmlentities($text);
+   if($processed == $text){//NON HTML
+	   $text=preg_replace('~\R~u', '</w:t><w:br/><w:t>', $text);
+	   $table->addCell(2000)->addText(stripslashes($text),array('color'=> '313131','size' => 12));
+   }else{//HTML
+		$text='<body style="color:313131;font-size:16px;">'.stripslashes($text).'</body>';
+		$text=html_entity_decode($text);
+		$cell = $table->addCell(2000); \PhpOffice\PhpWord\Shared\Html::addHtml($cell, $text);
+   }
 	$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
 }
 
 $section->addTextBreak(2);
 
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.odt"');
+header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.docx"');
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 $objWriter->save('php://output');
