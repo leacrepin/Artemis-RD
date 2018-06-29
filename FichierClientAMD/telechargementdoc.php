@@ -286,7 +286,7 @@ $footer=$section->addFooter();
 $footer->addPreserveText("{PAGE}");
 
 //Logo artemis-RD footer
-$footer->addImage('images/ArtemisRD.png',array('height' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+$footer->addImage('images/AMD.png',array('height' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 
 //Logo entreprise header
 $header = $section->addHeader();
@@ -335,7 +335,9 @@ $pagedegarde->addText(
 		'rStyle2',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
 
+
 //Barre ArtemisRD
+/*
 $pagedegarde->addTextBreak(8);
 $pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîmes',
@@ -343,7 +345,7 @@ $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîme
     );
 $pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)));
-
+*/
 
 
 //------------------Table des matières--------------------
