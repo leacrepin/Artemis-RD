@@ -289,7 +289,7 @@ $footer=$section->addFooter();
 $footer->addPreserveText("{PAGE}");
 
 //Logo artemis-RD footer
-$footer->addImage('images/AMD.png',array('height' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
+$footer->addImage('images/ArtemisRD.png',array('height' => 50, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER));
 
 //Logo entreprise header
 $header = $section->addHeader();
@@ -318,7 +318,7 @@ $pagedegarde->addTextBreak(3);
 
 $pagedegarde->addText(
 		htmlspecialchars(
-				'Bilan Mensuel SI'
+				'Bilan Annuel SI'
 		),
 		'rStyle',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
 );
@@ -338,7 +338,6 @@ $pagedegarde->addText(
 		'rStyle2',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ]
 );
 
-/*
 //Barre ArtemisRD
 $pagedegarde->addTextBreak(8);
 $pagedegarde->addText(htmlspecialchars('Artemis-RD'),'Artemis-RD',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
@@ -347,7 +346,7 @@ $pagedegarde->addText('+33 (0)9 52 31 26 70 - 8 quai de la Fontaine, 30000 Nîme
     );
 $pagedegarde->addText(htmlspecialchars("____________________________________________________________"),'LigneVerte',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER ,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),'spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)]);
 $pagedegarde->addImage('images/ArtemisRD.png',array('width' => 70, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER,'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0)));
-*/
+
 
 
 //------------------Table des matières--------------------
@@ -389,9 +388,9 @@ $tableStyle = array(
 	'borderSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
 );
 $phpWord->addTableStyle('myTable2', $tableStyle);
-//Gris->'8F8F8F' BleuArtemis->'0099B1' VertAMD->'006A51'
-$cellRowSpan = array('bgColor' => '006A51');//Colonne de gauche
-$cellRowSpan2 = array('bgColor' => '006A51');//Colonne de droite
+//Gris->'8F8F8F' BleuArtemis->'0099B1'
+$cellRowSpan = array('bgColor' => '0099B1');//Colonne de gauche
+$cellRowSpan2 = array('bgColor' => '0099B1');//Colonne de droite
 
 
 //Incidents critiques et majeurs

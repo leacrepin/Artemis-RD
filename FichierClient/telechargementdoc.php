@@ -56,6 +56,9 @@ $année2=substr($_GET["date2"], -10,4);
 if($jour1=="01" && $jour2==nombreDeJour((int)$mois1,(int)$année1) && $année1==$année2 && $mois1==$mois2){
 	$date = $moisLettres[(int) $mois1-1].' '.$année1;
 }
+if($jour1=="01" && $jour2=="31" && $mois1=="01" && $mois2=="12" && $année1==$année2){
+	$date=$année1;
+}
 //Base de donnée -> Recherche s'il y a des problèmes de catégorie
 
 $query2 = "
@@ -541,6 +544,7 @@ while($ligne=$DB->fetch_assoc($suivi)){
 	   $text=preg_replace('~\R~u', '</w:t><w:br/><w:t>', $text);
 	   $table->addCell(2000)->addText(stripslashes($text),array('color'=> '313131','size' => 12));
    }else{//HTML
+		$text=preg_replace('~\R~u', '<br/>', $text);
 		$text='<body style="color:313131;font-size:16px;">'.stripslashes($text).'</body>';
 		$text=html_entity_decode($text);
 		$cell = $table->addCell(2000); \PhpOffice\PhpWord\Shared\Html::addHtml($cell, $text);

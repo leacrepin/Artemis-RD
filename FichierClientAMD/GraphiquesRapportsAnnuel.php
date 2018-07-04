@@ -102,8 +102,8 @@ if(!empty($_POST['submit']))
 }
 
 else {
-	$data_ini = date("Y-m-01");
-	$data_fin = date("Y-m-".nombreDeJour(date("m"), date("Y")));
+	$data_ini = date("Y-01-01");
+	$data_fin = date("Y-12-31");
 }
 
 
@@ -420,7 +420,7 @@ echo '<div id="name"  style="margin-top: 15px;"><span>'.$ent_name['name'].'</spa
 </script>
 			
 			<h1>Faire mon fichier client</h1>
-        <p><a tabindex="-1" style="color:#000000;" href=<?php echo "telechargementdoc.php?id=".$id_ent."&date1=".$data_ini."&date2=".$data_fin."&entreprise=".$ent_name['name'] ; ?> target="_blank"> Télécharger le fichier client </a>
+        <p><a tabindex="-1" style="color:#000000;" href=<?php echo "telechargementdocAnnuel.php?id=".$id_ent."&date1=".$data_ini."&date2=".$data_fin."&entreprise=".$ent_name['name'] ; ?> target="_blank"> Télécharger le fichier client </a>
 		</p>
     <form id="header" action = "ajoutLogo.php" method = "POST" enctype="multipart/form-data">
 	<h5>Veuillez mettre un logo client en .png (optionnel)</h5>
@@ -863,10 +863,17 @@ echo "                ],
 			chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
-                plotShadow: false
+                plotShadow: false,
+				style: {
+					font: '12px Dosis, sans-serif'
+				}
             },
             title: {
-                text: 'Répartition par actions'
+                text: 'Répartition par actions',
+				style: {
+					textTransform: 'uppercase',
+					fontWeight: 'bold'
+				}
             },
             tooltip: {
         	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1031,10 +1038,17 @@ echo "                ],
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
-				type: 'pie'
+				type: 'pie',
+				style: {
+					font: '12px Dosis, sans-serif'
+				}
             },
             title: {
-                text: 'Répartition par application'
+                text: 'Répartition par application',
+				style: {
+					textTransform: 'uppercase',
+					fontWeight: 'bold'
+				}
 
             },
             tooltip: {
@@ -1195,10 +1209,17 @@ echo "                ],
 			chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
-                plotShadow: false
+                plotShadow: false,
+				style: {
+					font: '12px Dosis, sans-serif'
+				}
             },
             title: {
-                text: 'Incidents Critiques et Majeurs'
+                text: 'Incidents Critiques et Majeurs',
+				style: {
+					textTransform: 'uppercase',
+					fontWeight: 'bold'
+				}
             },
             tooltip: {
         	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1361,10 +1382,17 @@ echo "                ],
 			chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
-                plotShadow: false
+                plotShadow: false,
+				style: {
+					font: '12px Dosis, sans-serif'
+				}
             },
             title: {
-                text: 'Incidents Critiques'
+                text: 'Incidents Critiques',
+				style: {
+					textTransform: 'uppercase',
+					fontWeight: 'bold'
+				}
             },
             tooltip: {
         	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1527,10 +1555,17 @@ echo "                ],
 			chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
-                plotShadow: false
+                plotShadow: false,
+				style: {
+					font: '12px Dosis, sans-serif'
+				}
             },
             title: {
-                text: 'Incidents Mineurs'
+                text: 'Incidents Mineurs',
+				style: {
+					textTransform: 'uppercase',
+					fontWeight: 'bold'
+				}
             },
             tooltip: {
         	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

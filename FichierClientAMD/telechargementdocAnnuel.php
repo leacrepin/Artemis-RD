@@ -318,7 +318,7 @@ $pagedegarde->addTextBreak(3);
 
 $pagedegarde->addText(
 		htmlspecialchars(
-				'Bilan Mensuel SI'
+				'Bilan Annuel SI'
 		),
 		'rStyle',[ 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
 );
@@ -556,7 +556,7 @@ while($ligne=$DB->fetch_assoc($suivi)){
 $section->addTextBreak(2);
 
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.docx"');
+header('Content-Disposition: attachment;filename="Bilan_Annuel_SI.docx"');
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 $objWriter->save('php://output');
