@@ -375,6 +375,7 @@ $section->addTextBreak(1);
 
 //Style tableaux
 $tableStyle = array(
+	'cantSplit' => true,
     'borderColor' => '000000',
 	'borderSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.5),
     'borderTopSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6),
@@ -383,11 +384,6 @@ $tableStyle = array(
 	'borderBottomSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
 );
 $phpWord->addTableStyle('myTable', $tableStyle);
-$tableStyle = array(
-    'borderColor' => '000000',
-	'borderSize'  => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0.6)
-);
-$phpWord->addTableStyle('myTable2', $tableStyle);
 //Gris->'8F8F8F' BleuArtemis->'0099B1'
 $cellRowSpan = array('bgColor' => '0099B1');//Colonne de gauche
 $cellRowSpan2 = array('bgColor' => '0099B1');//Colonne de droite
@@ -407,15 +403,15 @@ $table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '31
 
 while($ligne=$DB->fetch_assoc($critiqueetmajeur)){
 	$table->addRow();
-	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
-	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+	$table->addCell(7000)->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell(3000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
-$table = $section->addTable('myTable2');
+$table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
@@ -438,15 +434,15 @@ $table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '31
 
 while($ligne=$DB->fetch_assoc($critique)){
 	$table->addRow();
-	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
-	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+	$table->addCell(7000)->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell(3000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
-$table = $section->addTable('myTable2');
+$table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
@@ -468,15 +464,15 @@ $table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '31
 
 while($ligne=$DB->fetch_assoc($mineur)){
 	$table->addRow();
-	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
-	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+	$table->addCell(7000)->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell(3000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
-$table = $section->addTable('myTable2');
+$table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
@@ -499,15 +495,15 @@ $table->addCell(3000, $cellRowSpan2)->addText("Temps passé",array('color'=> '31
 
 while($ligne=$DB->fetch_assoc($changement)){
 	$table->addRow();
-	$table->addCell()->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
-	$table->addCell()->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
+	$table->addCell(7000)->addText(stripslashes($ligne['name']),array('color'=> '313131','size' => 12));
+	$table->addCell(3000)->addText(convertirTemps($ligne['temps']),array('color'=> '313131','size' => 12));
 }
 $table->addRow();
 $table->addCell(7000, $cellRowSpan)->addText("Total général",array('color'=> '313131','size' => 12));
-$table->addCell()->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['temps']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
-$table = $section->addTable('myTable2');
+$table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
@@ -532,7 +528,7 @@ $table->addCell(8000, $cellRowSpan)->addText("Etiquettes de lignes",array('color
 $table->addCell(2000, $cellRowSpan2)->addText("Temps passé",array('color'=> '313131','size' => 12));
 
 $table->addRow();
-$table->addCell(2000)->addText("SUIVI",array('color'=> '313131','size' => 12));
+$table->addCell(8000)->addText("SUIVI",array('color'=> '313131','size' => 12));
 $ligne=$DB->fetch_assoc($tempssuivi);
 $table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
 
@@ -542,12 +538,12 @@ while($ligne=$DB->fetch_assoc($suivi)){
 	$processed = htmlentities($text);
    if($processed == $text){//NON HTML
 	   $text=preg_replace('~\R~u', '</w:t><w:br/><w:t>', $text);
-	   $table->addCell(2000)->addText(stripslashes($text),array('color'=> '313131','size' => 12));
+	   $table->addCell(8000)->addText(stripslashes($text),array('color'=> '313131','size' => 12));
    }else{//HTML
 		$text=preg_replace('~\R~u', '<br/>', $text);
 		$text='<body style="color:313131;font-size:16px;">'.stripslashes($text).'</body>';
 		$text=html_entity_decode($text);
-		$cell = $table->addCell(2000); \PhpOffice\PhpWord\Shared\Html::addHtml($cell, $text);
+		$cell = $table->addCell(8000); \PhpOffice\PhpWord\Shared\Html::addHtml($cell, $text);
    }
 	$table->addCell(2000)->addText(($ligne['temps']/3600)." h",array('color'=> '313131','size' => 12));
 }

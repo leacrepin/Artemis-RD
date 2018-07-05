@@ -36,6 +36,9 @@ global $DB;
 		if ($m == 1) {
 			return('Incident');
 		}
+		if ($m == 2) {
+			return('Demande');
+		}
 		if ($m == 3){
 			return('Suivi');
 		}
