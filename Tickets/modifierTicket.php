@@ -42,10 +42,10 @@ global $DB;
 		if ($m == 3){
 			return('Suivi');
 		}
-		if ($m == 4){
+		if ($m == 5){
 			return('Changement');
 		}
-		if ($m == 5){
+		if ($m == 4){
 			return('Evenement');
 		}
 	}

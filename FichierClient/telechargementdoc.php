@@ -14,7 +14,7 @@ function convertirTemps($duree){
 	$heures=intval(($duree / 3600)% 24);
 	$minutes=intval(($duree % 3600) / 60);
 	$secondes=intval((($duree % 3600) % 60));
-	return($jour."j ".$heures."h ".$minutes."m ".$secondes."s ");
+	return(" ".$jour."j ".$heures."h ".$minutes."m ".$secondes."s ");
 }
 
 //BEGIN BDD

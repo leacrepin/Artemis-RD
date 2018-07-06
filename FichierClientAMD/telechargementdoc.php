@@ -14,7 +14,7 @@ function convertirTemps($duree){
 	$heures=intval(($duree / 3600)% 24);
 	$minutes=intval(($duree % 3600) / 60);
 	$secondes=intval((($duree % 3600) % 60));
-	return($jour."j ".$heures."h ".$minutes."m ".$secondes."s ");
+	return(" ".$jour."j ".$heures."h ".$minutes."m ".$secondes."s ");
 }
 
 //BEGIN BDD
@@ -447,7 +447,7 @@ $table = $section->addTable('myTable');
 
 $table->addRow();
 $table->addCell(7000,$cellRowSpan2)->addText("Moyenne de Résolution",array('color'=> '313131','size' => 12));
-$table->addCell(3000)->addText("zaertyuhiuyt".convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
+$table->addCell(3000)->addText(convertirTemps($temps['moyenne']),array('color'=> '313131','size' => 12));
 
 $section->addTextBreak(1);
 }

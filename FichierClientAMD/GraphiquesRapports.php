@@ -750,55 +750,33 @@ while ($row_result = $DB->fetch_assoc($result))
 // On stock l'ID dans grft2, la valeur dans quantt2
 $test = array_values($arr_grft2);
 $grft2 = array_keys($arr_grft2);
+print_r($grft2);
 $quantt2 = array_values($arr_grft2);
 $conta = count($arr_grft2);
-// Si il n'y a qu'un type
-if ($conta < 1){
-  // Si l'ID = 1
-  if ($grft2[0] == 1) {
-    $grft2[0] = __('Incident');
-  }
-  if ($grft2[0] == 3){
-    $grft2[0] = __('Suivi');
-  }
-  if ($grft2[0] == 4){
-    $grft2[0] = __('Changement');
-  }
-  if ($grft2[0] == 5){
-    $grft2[0] = __('Evenement');
-  }
-}
+
 function convertirTemps($duree){
 	$heures=intval(($duree / 3600));
 	$minutes=intval(($duree % 3600) / 60);
 	return($heures.":".$minutes." H");
 }
-
-// Si il y a + de 1 types
-if($conta >= 1) {
-	if ($test[0]  >= 86400)
-  $grft2[0] = "Incident " . ' ' . convertirTemps($test[0]);
-	else
-	{
-		$grft2[0] = "Incident " . ' ' . date('H:i', $test[0] - 3600) . " H";
-	}
-	if ($test[1]  >= 86400)
-  $grft2[1] = "Suivi" . ' ' . convertirTemps($test[1]);
-	else
-	{
-	 $grft2[1] = "Suivi" . ' ' . date('H:i', $test[1] - 3600) . " H";
-	}
-	if ($test[2]  >= 86400)
-  $grft2[2] = "Changement" . ' ' . convertirTemps($test[2]);
-	else{
-		$grft2[2] = "Changement" . ' ' . date('H:i', $test[2] - 3600) . " H";
-	}
-	if ($test[3]  >= 86400)
-  $grft2[3] = "Evenement" . ' ' . convertirTemps($test[3]);
-	else{
-	$grft2[3] = "Evenement" . ' ' . date('H:i', $test[3] - 3600) . " H";
-	}
+for($i = 0; $i <= $conta; $i++) {
+if($grft2[$i] ===1){
+		$grft2[$i] = "Incident" . ' ' . date('H:i', $test[$i] - 3600) . " H";
 }
+if($grft2[$i] ===2){
+		$grft2[$i] = "Demande" . ' ' . date('H:i', $test[$i] - 3600) . " H";
+}
+if($grft2[$i] ===3){
+		$grft2[$i] = "Suivi" . ' ' . date('H:i', $test[$i] - 3600) . " H";
+}
+if($grft2[$i] ===4){
+		$grft2[$i] = "Evenement" . ' ' . date('H:i', $test[$i] - 3600) . " H";
+}
+if($grft2[$i] ===5){
+		$grft2[$i] = "Changement" . ' ' . date('H:i', $test[$i] - 3600) . " H";
+}
+}
+
 
 echo "
 <script type='text/javascript'>
