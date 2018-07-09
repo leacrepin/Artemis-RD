@@ -39,7 +39,7 @@ require "connect.php";
 
 //mysql_query("SET NAMES 'utf8'"); 
 
-$query=$db->query("SELECT IP_WAN FROM glpi_users");
+$query=$db->query("SELECT IP_WAN FROM glpi_users WHERE glpi=1");
 while($ip=$query->fetch()){
 	if($ip["IP_WAN"]===get_ip()){
 		header('Location: http://185.50.52.133/artemis/glpi/');
