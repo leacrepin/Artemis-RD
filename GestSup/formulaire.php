@@ -1,5 +1,4 @@
 ﻿<?php
-ob_start();
 
 /**
  * Récupérer la véritable adresse IP d'un visiteur
@@ -19,6 +18,20 @@ function get_ip() {
 	}
 }
 
+require "connect.php";
+
+$query=$db->query("SELECT IP_WAN FROM glpi_users WHERE glpi=1");
+while($ip=$query->fetch()){
+	if($ip["IP_WAN"]===get_ip()){
+		$query->closeCursor();
+		header('Location: http://185.50.52.133/artemis/glpi/');
+		exit();	
+	}
+}
+$query->closeCursor();
+
+ob_start();
+
 if(!isset($_GET['send'])) $_GET['send'] = '';
 if(!isset($_GET['place'])) $_GET['place'] = '';
 if(!isset($_GET['u_group'])) $_GET['u_group']= '';
@@ -34,18 +47,6 @@ if(!isset($_POST['lastname'])) $_POST['lastname']= $_GET['lastname'];
 if(!isset($_POST['usermail'])) $_POST['usermail']= $_GET['usermail'];
 if(!isset($_POST['phone'])) $_POST['phone']= $_GET['phone'];
 if(!isset($_POST['text'])) $_POST['text']= $_GET['text'];
-
-require "connect.php";
-
-mysql_query("SET NAMES 'utf8'"); 
-
-$query=$db->query("SELECT IP_WAN FROM glpi_users WHERE glpi=1");
-while($ip=$query->fetch()){
-	if($ip["IP_WAN"]===get_ip()){
-		header('Location: http://185.50.52.133/artemis/glpi&output=embed');
-	}
-}
-$query->closeCursor(); 
 
 
 $query=$db->query("SELECT * FROM tparameters");
