@@ -1,5 +1,4 @@
 ﻿<?php
-
 /**
  * Récupérer la véritable adresse IP d'un visiteur
  */
@@ -19,16 +18,13 @@ function get_ip() {
 }
 
 require "connect.php";
-
-$query=$db->query("SELECT IP_WAN FROM glpi_users WHERE glpi=1");
-while($ip=$query->fetch()){
-	if($ip["IP_WAN"]===get_ip()){
-		$query->closeCursor();
-		header('Location: http://185.50.52.133/artemis/glpi/');
-		exit();	
-	}
+echo get_ip();
+$query=$db->query("SELECT COUNT(IP_WAN) AS nb FROM glpi_users WHERE glpi=1 AND IP_WAN='".get_ip()."'");
+$ip=$query->fetch();
+if($ip["nb"]>0){
+	header('Location: http://185.50.52.133/artemis/glpi/');
+	exit();	
 }
-$query->closeCursor();
 
 ob_start();
 
