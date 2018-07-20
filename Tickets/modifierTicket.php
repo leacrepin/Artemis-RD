@@ -86,7 +86,7 @@ global $DB;
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
 <title> GLPI - Modifier Tickets </title>
 <!-- <base href= "<?php $_SERVER['SERVER_NAME'] ?>" > -->
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE11">
 <meta http-equiv="content-language" content="en-us">
 <meta charset="utf-8">
 
