@@ -18,9 +18,9 @@ function get_ip() {
 }
 
 require "connect.php";
-echo get_ip();
 $query=$db->query("SELECT COUNT(IP_WAN) AS nb FROM glpi_users WHERE glpi=1 AND IP_WAN='".get_ip()."'");
 $ip=$query->fetch();
+$query->closeCursor(); 
 if($ip["nb"]>0){
 	header('Location: http://185.50.52.133/artemis/glpi/');
 	exit();	
