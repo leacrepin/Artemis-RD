@@ -225,7 +225,7 @@ $ent=$DB->fetch_assoc($result_ent);
 		 <label> Temps de la Tâche: <select name="time" id="time" >
 <?php
 echo "<option selected='selected' value='".$ent["actiontime"]."'>".convertirTemps($ent["actiontime"])."</option>\n";
-$i=$ent["actiontime"];
+$i=0;
 while($i<=360000){
 	$i=$i+60;
 					echo "<option value='".$i."'>".convertirTemps($i)."</option>\n";

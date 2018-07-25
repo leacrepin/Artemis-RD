@@ -198,7 +198,9 @@ if (!file_exists(GLPI_CONFIG_DIR . "/config_db.php")) {
                 <button type="submit" class="btn btn-default btn-lg btn-block btn-primary"><?php echo _sx('button','Post'); ?></button>
               </div>
 			  <div class="form-group">
-                <button type="submit" class="btn btn-default btn-lg btn-block btn-primary">Authentification par IP</button>
+					<a href='front/loginIP.php' > 
+						<input type="button" class="btn btn-default btn-lg btn-block btn-primary" value="Authentification par IP">
+					</a>
               </div>
               <div class="form-group last-row">
 

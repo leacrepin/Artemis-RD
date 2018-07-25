@@ -45,21 +45,40 @@ if (!isset($_SESSION["glpicookietest"]) || ($_SESSION["glpicookietest"] != 'test
    }
 }
 
-$_POST = array_map('stripslashes', $_POST);
+//Authentication par IP
 
-//Do login and checks
-//$user_present = 1;
-if (isset($_SESSION['namfield']) && isset($_POST[$_SESSION['namfield']])) {
-   $login = $_POST[$_SESSION['namfield']];
-} else {
-   $login = '';
+/**
+ * Récupérer la véritable adresse IP d'un visiteur
+ */
+function get_ip() {
+	// IP si internet partagé
+	if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+		return $_SERVER['HTTP_CLIENT_IP'];
+	}
+	// IP derrière un proxy
+	elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		return $_SERVER['HTTP_X_FORWARDED_FOR'];
+	}
+	// Sinon : IP normale
+	else {
+		return (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
+	}
+}
+global $DB;
+$query=$DB->query("SELECT user_name,IP_WAN FROM glpi_ip WHERE IP_WAN='".get_ip()."'") or die('erro');
+$ip=$query->fetch_assoc();
+
+if($ip!=false){
+	$_SESSION["loginautoclient"]=true;
+	$login = $ip["user_name"];
+	$password = 'null';	
+}else{
+	$_SESSION["loginautoclient"]=false;
+	$login = '';
+	$password = '';	
 }
 
-if (isset($_SESSION['pwdfield']) && isset($_POST[$_SESSION['pwdfield']])) {
-   $password = Toolbox::unclean_cross_side_scripting_deep($_POST[$_SESSION['pwdfield']]);
-} else {
-   $password = '';
-}
+
 
 
 $remember = isset($_SESSION['rmbfield']) && isset($_POST[$_SESSION['rmbfield']]) && $CFG_GLPI["login_remember_time"];
