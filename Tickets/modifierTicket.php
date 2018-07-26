@@ -72,7 +72,7 @@ global $DB;
 	}
 	
 	function convertirTemps($duree){
-		$heures=intval(($duree / 3600)% 24);
+		$heures=intval($duree / 3600);
 		$minutes=intval(($duree % 3600) / 60);
 		$secondes=intval((($duree % 3600) % 60));
 		return($heures."h ".$minutes."m ");
@@ -226,7 +226,7 @@ $ent=$DB->fetch_assoc($result_ent);
 <?php
 echo "<option selected='selected' value='".$ent["actiontime"]."'>".convertirTemps($ent["actiontime"])."</option>\n";
 $i=0;
-while($i<=360000){
+while($i<360000){
 	$i=$i+60;
 					echo "<option value='".$i."'>".convertirTemps($i)."</option>\n";
 } 
