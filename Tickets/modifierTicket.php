@@ -137,7 +137,7 @@ tinymce.init({
 	
 		<div id="head-tic" class="fluid" >	
 			<a href="../"><i class="fa fa-home" style="font-size:14pt; margin-left:5px; margin-top:15px;"></i><span></span></a>
-			<div id="titulo" class="tit-config" style="margin-bottom: 25px;"> <a href="config.php" > Modifier Tickets </a></div> 
+			<div id="titulo" class="tit-config" style="margin-bottom: 25px;">Modifier Tickets</div> 
 		</div>
 				                                                           
 			<div id="charts" class="fluid chart" style="background-color:#fff;">				
