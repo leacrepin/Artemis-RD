@@ -760,22 +760,22 @@ function convertirTemps($duree){
 	return($heures.":".$minutes." H");
 }
 for($i = 0; $i <= $conta; $i++) {
-if($grft2[$i] ===1){
-		$grft2[$i] = "Incident" . ' ' . date('H:i', $test[$i] - 3600) . " H";
-}
-if($grft2[$i] ===2){
-		$grft2[$i] = "Demande" . ' ' . date('H:i', $test[$i] - 3600) . " H";
-}
-if($grft2[$i] ===3){
-		$grft2[$i] = "Suivi" . ' ' . date('H:i', $test[$i] - 3600) . " H";
-}
-if($grft2[$i] ===4){
-		$grft2[$i] = "Evenement" . ' ' . date('H:i', $test[$i] - 3600) . " H";
-}
-if($grft2[$i] ===5){
-		$grft2[$i] = "Changement" . ' ' . date('H:i', $test[$i] - 3600) . " H";
-}
-}
+	if($grft2[$i] ===1){
+			$grft2[$i] = "Incident" . ' ' . convertirTemps($quantt2[$i]);
+	}
+	if($grft2[$i] ===2){
+			$grft2[$i] = "Demande" . ' ' . convertirTemps($quantt2[$i]);
+	}
+	if($grft2[$i] ===3){
+			$grft2[$i] = "Suivi" . ' ' . convertirTemps($quantt2[$i]);
+	}
+	if($grft2[$i] ===4){
+			$grft2[$i] = "Evenement" . ' ' . convertirTemps($quantt2[$i]);
+	}
+	if($grft2[$i] ===5){
+			$grft2[$i] = "Changement" . ' ' . convertirTemps($quantt2[$i]);
+	}
+	}
 
 echo "
 <script type='text/javascript'>
