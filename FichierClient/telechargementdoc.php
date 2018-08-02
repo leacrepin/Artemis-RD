@@ -21,6 +21,7 @@ function convertirTemps($duree){
 
 $datas = "BETWEEN '".$_GET["date1"]." 00:00:00' AND '".$_GET["date2"]." 23:59:59'";
 $date = "du ".$_GET["date1"]." au ".$_GET["date2"];
+$date2 = $_GET["date1"]."_".$_GET["date2"];
 $id_ent = $_GET["id"];
 
 //Calcul de la date (si il s'agit d'un mois en particulier ou non)
@@ -55,9 +56,11 @@ $année2=substr($_GET["date2"], -10,4);
 
 if($jour1=="01" && $jour2==nombreDeJour((int)$mois1,(int)$année1) && $année1==$année2 && $mois1==$mois2){
 	$date = $moisLettres[(int) $mois1-1].' '.$année1;
+	$date2 = $mois1.''.$année1;
 }
 if($jour1=="01" && $jour2=="31" && $mois1=="01" && $mois2=="12" && $année1==$année2){
-	$date=$année1;
+	$date = $année1;
+	$date2 = $année1;
 }
 //Base de donnée -> Recherche s'il y a des problèmes de catégorie
 
@@ -549,9 +552,9 @@ while($ligne=$DB->fetch_assoc($suivi)){
 }
 
 $section->addTextBreak(2);
-
+$filename='TDB_'.$_GET["entreprise"].'_'.$date2.'.docx';
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.docx"');
+header('Content-Disposition: attachment;filename="'.$filename.'"');
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 $objWriter->save('php://output');
