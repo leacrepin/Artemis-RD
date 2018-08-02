@@ -553,9 +553,9 @@ while($ligne=$DB->fetch_assoc($suivi)){
 }
 
 $section->addTextBreak(2);
-
+$filename='TDB_'.$_GET["entreprise"].'_'.$date2.'.docx';
 header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment;filename="Bilan_Mensuel_SI.docx"');
+header('Content-Disposition: attachment;filename="'.$filename.'"');
 
 $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord);
 $objWriter->save('php://output');
