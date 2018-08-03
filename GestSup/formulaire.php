@@ -22,7 +22,7 @@ $query=$db->query("SELECT COUNT(IP_WAN) AS nb FROM glpi_users WHERE glpi=1 AND I
 $ip=$query->fetch();
 $query->closeCursor(); 
 if($ip["nb"]>0){
-	header('Location: http://185.50.52.133/artemis/glpi/index2.php');
+	header('Location: http://glpi.artemis-rd.fr/index2.php');
 	exit();	
 }
 
