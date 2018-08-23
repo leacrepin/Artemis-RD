@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.light_blue-blue.min.css" /> 
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>	
+    <link rel="stylesheet" href="style.css"/>
+    <title>Rapprochement bancaire</title>
+  </head>
+
+  <body>
+	<h1>Faire mon rapprochement bancaire</h1>
+        
+    <form id="header" action = "enregistrementExcel.php" method = "POST" enctype="multipart/form-data">
+        
+        <h5>Veuillez mettre le fichier A</h5><input type = "file" name = "image1">
+    <br><h5>Veuillez mettre le fichier B</h5><input type = "file" name = "image2">
+    <ul>-> Les fichiers doivent être en .xls</ul>
+    <ul>-> Les tableaux doivent être sur la Feuille 1, il faut 
+      donc creer puis copier coller</ul>
+    <ul>-> si il y a des ###### c'est une sécurité du relevé 
+      bancaire il faut juste changer le format de la cellule 
+      (il peut tout de même faire la comparaison avec)</ul>
+	  <br><br><br>
+      <input type = "submit" class="mdl-button mdl-button--raised mdl-button--colored">
+      <input type = "reset" class="mdl-button mdl-button--raised mdl-button--colored">
+    </form>
+
+  </body>
+</html>
